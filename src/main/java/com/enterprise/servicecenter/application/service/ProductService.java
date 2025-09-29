@@ -9,6 +9,7 @@ import com.enterprise.servicecenter.application.port.out.ProductPackageRepositor
 import com.enterprise.servicecenter.application.port.out.ProductRepository;
 import com.enterprise.servicecenter.common.util.DateUtil;
 import com.enterprise.servicecenter.common.util.IdGenerator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,14 @@ public class ProductService implements ProductUseCase {
   @Override
   public ProductResponse findById(String productId) {
     return mapProductResponse(productRepository.findById(productId));
+  }
+
+  @Override
+  public List<ProductResponse> findAll(String input, int pageNumber, int pageSize) {
+    return productRepository.findAll(input, pageNumber, pageSize)
+            .stream()
+            .map(this::mapProductResponse)
+            .toList();
   }
 
   private Product buildProduct(CreateProductRequest createProductRequest, String productId) {
